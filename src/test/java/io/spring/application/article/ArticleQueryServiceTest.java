@@ -14,7 +14,7 @@ import io.spring.core.user.UserRepository;
 import io.spring.infrastructure.repository.MyBatisArticleFavoriteRepository;
 import io.spring.infrastructure.repository.MyBatisArticleRepository;
 import io.spring.infrastructure.repository.MyBatisUserRepository;
-import org.joda.time.DateTime;
+import java.time.Instant;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,7 +57,7 @@ public class ArticleQueryServiceTest {
     public void setUp() {
         user = new User("aisensiy@gmail.com", "aisensiy", "123", "", "");
         userRepository.save(user);
-        article = new Article("test", "desc", "body", new String[]{"java", "spring"}, user.getId(), new DateTime());
+        article = new Article("test", "desc", "body", new String[]{"java", "spring"}, user.getId(), Instant.now());
         articleRepository.save(article);
     }
 
@@ -90,7 +90,7 @@ public class ArticleQueryServiceTest {
 
     @Test
     public void should_get_default_article_list() {
-        Article anotherArticle = new Article("new article", "desc", "body", new String[]{"test"}, user.getId(), new DateTime().minusHours(1));
+        Article anotherArticle = new Article("new article", "desc", "body", new String[]{"test"}, user.getId(), Instant.now().minusSeconds(3600));
         articleRepository.save(anotherArticle);
 
         ArticleDataList recentArticles = queryService.findRecentArticles(null, null, null, new Page(), user);
