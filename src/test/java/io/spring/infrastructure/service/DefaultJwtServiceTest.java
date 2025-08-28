@@ -18,7 +18,7 @@ public class DefaultJwtServiceTest {
 
     @Before
     public void setUp() {
-        jwtService = new DefaultJwtService("mySecretKeyForJWTTokenGenerationThatIsLongEnoughToMeetTheNewJJWTLibrarySecurityRequirementsAndShouldBeAtLeast256BitsOrThirtyTwoCharactersLongToAvoidWeakKeyExceptions", 3600);
+        jwtService = new DefaultJwtService("1234567890123456789012345678901234567890123456789012345678901234", 3600);
     }
 
     @Test
