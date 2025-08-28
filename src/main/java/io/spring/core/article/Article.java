@@ -3,7 +3,7 @@ package io.spring.core.article;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,14 +23,14 @@ public class Article {
     private String description;
     private String body;
     private List<Tag> tags;
-    private DateTime createdAt;
-    private DateTime updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public Article(String title, String description, String body, String[] tagList, String userId) {
-        this(title, description, body, tagList, userId, new DateTime());
+        this(title, description, body, tagList, userId, LocalDateTime.now());
     }
 
-    public Article(String title, String description, String body, String[] tagList, String userId, DateTime createdAt) {
+    public Article(String title, String description, String body, String[] tagList, String userId, LocalDateTime createdAt) {
         this.id = UUID.randomUUID().toString();
         this.slug = toSlug(title);
         this.title = title;
@@ -53,7 +53,7 @@ public class Article {
         if (!"".equals(body)) {
             this.body = body;
         }
-        this.updatedAt = new DateTime();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public static String toSlug(String title) {
