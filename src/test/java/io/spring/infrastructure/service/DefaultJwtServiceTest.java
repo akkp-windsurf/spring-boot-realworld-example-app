@@ -18,7 +18,8 @@ public class DefaultJwtServiceTest {
 
     @Before
     public void setUp() {
-        jwtService = new DefaultJwtService("123123", 3600);
+        String testSecret = "test-secret-key-that-is-long-enough-for-hmac-sha-algorithms-and-meets-security-requirements";
+        jwtService = new DefaultJwtService(testSecret, 3600);
     }
 
     @Test
