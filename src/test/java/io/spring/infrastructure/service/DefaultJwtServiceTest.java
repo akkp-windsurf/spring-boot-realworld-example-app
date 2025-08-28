@@ -18,7 +18,12 @@ public class DefaultJwtServiceTest {
 
     @Before
     public void setUp() {
-        jwtService = new DefaultJwtService("1234567890123456789012345678901234567890123456789012345678901234", 3600);
+        String testSecret = System.getProperty("jwt.test.secret", generateTestSecret());
+        jwtService = new DefaultJwtService(testSecret, 3600);
+    }
+
+    private String generateTestSecret() {
+        return "a".repeat(64);
     }
 
     @Test
