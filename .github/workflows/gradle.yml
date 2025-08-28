@@ -32,11 +32,16 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          key: ${{ runner.os }}-gradle-java17-migration-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Build JAR with Gradle
-        run: ./gradlew clean build
+        run: |
+          echo "Java version in CI:"
+          java -version
+          echo "Gradle version in CI:"
+          ./gradlew --version
+          ./gradlew clean build --info --stacktrace
       # Temporarily disable Drill4J steps for Java 17 migration
       # TODO: Re-enable once Drill4J compatibility with Java 17 and Spring Boot 3.x is confirmed
       # - name: Download Drill4J agent
