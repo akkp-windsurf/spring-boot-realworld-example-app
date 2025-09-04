@@ -21,9 +21,6 @@ import static java.util.Arrays.asList;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("${spring.h2.console.enabled:false}")
-    private boolean h2ConsoleEnabled;
-
     @Bean
     public JwtTokenFilter jwtTokenFilter() {
         return new JwtTokenFilter();
@@ -31,12 +28,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-        if (h2ConsoleEnabled)
-            http.authorizeRequests()
-                .antMatchers("/h2-console", "/h2-console/**").permitAll()
-                .and()
-                .headers().frameOptions().sameOrigin();
 
         http.csrf().disable()
             .cors()
