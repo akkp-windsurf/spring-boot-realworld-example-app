@@ -3,7 +3,7 @@ package io.spring.infrastructure.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import io.spring.core.service.JwtService;
 import io.spring.core.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +28,20 @@ public class DefaultJwtService implements JwtService {
     @Override
     public String toToken(User user) {
         return Jwts.builder()
-            .setSubject(user.getId())
-            .setExpiration(expireTimeFromNow())
-            .signWith(SignatureAlgorithm.HS512, secret)
+            .subject(user.getId())
+            .expiration(expireTimeFromNow())
+            .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
             .compact();
     }
 
     @Override
     public Optional<String> getSubFromToken(String token) {
         try {
-            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
-            return Optional.ofNullable(claimsJws.getBody().getSubject());
+            Jws<Claims> claimsJws = Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
+                .build()
+                .parseSignedClaims(token);
+            return Optional.ofNullable(claimsJws.getPayload().getSubject());
         } catch (Exception e) {
             return Optional.empty();
         }
