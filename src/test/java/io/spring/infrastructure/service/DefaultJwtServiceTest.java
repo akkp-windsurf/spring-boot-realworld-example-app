@@ -18,7 +18,8 @@ public class DefaultJwtServiceTest {
 
     @Before
     public void setUp() {
-        jwtService = new DefaultJwtService("nRvyYC4soFxBdZ-F-5Nnzz5USXstR1YylsTd-mA0aKtI9HUlriGrtkf-TiuDapkLiUCogO3JOK7kwZisrHp6wA", 3600);
+        String testSecret = "test-secret-key-for-jwt-that-is-long-enough-to-meet-jjwt-security-requirements-256-bits-minimum";
+        jwtService = new DefaultJwtService(testSecret, 3600);
     }
 
     @Test
