@@ -35,7 +35,7 @@ It uses a H2 in memory database (for now), can be changed easily in the `applica
 
 # Getting started
 
-You need Java 8 installed.
+You need Java 17 installed.
 
     ./gradlew bootRun
 
