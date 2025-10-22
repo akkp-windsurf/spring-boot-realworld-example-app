@@ -7,13 +7,13 @@ import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
 import io.spring.infrastructure.repository.MyBatisArticleRepository;
 import io.spring.infrastructure.repository.MyBatisUserRepository;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 @MybatisTest
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @Import({MyBatisArticleRepository.class, MyBatisUserRepository.class})
 public class MyBatisArticleRepositoryTest {
     @Autowired
@@ -35,7 +35,7 @@ public class MyBatisArticleRepositoryTest {
     private Article article;
 
 
-    @Before
+    @BeforeEach
     public void setUp() {
         User user = new User("aisensiy@gmail.com", "aisensiy", "123", "bio", "default");
         userRepository.save(user);
