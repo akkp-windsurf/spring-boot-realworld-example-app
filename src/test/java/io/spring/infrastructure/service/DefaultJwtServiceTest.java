@@ -2,8 +2,8 @@ package io.spring.infrastructure.service;
 
 import io.spring.core.service.JwtService;
 import io.spring.core.user.User;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
@@ -16,9 +16,9 @@ public class DefaultJwtServiceTest {
 
     private JwtService jwtService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        jwtService = new DefaultJwtService("123123", 3600);
+        jwtService = new DefaultJwtService("123123123123123123123123123123123123123123123123", 3600);
     }
 
     @Test
