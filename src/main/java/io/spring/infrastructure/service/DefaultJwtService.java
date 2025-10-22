@@ -32,7 +32,7 @@ public class DefaultJwtService implements JwtService {
             this.key = Keys.hmacShaKeyFor(keyBytes);
             this.sessionTime = sessionTime;
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Failed to initialize JWT service", e);
+            throw new IllegalStateException("Failed to initialize JWT service: SHA-512 algorithm not available", e);
         }
     }
 
