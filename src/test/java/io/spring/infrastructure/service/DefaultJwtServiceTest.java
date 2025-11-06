@@ -18,7 +18,7 @@ public class DefaultJwtServiceTest {
 
     @Before
     public void setUp() {
-        jwtService = new DefaultJwtService("123123", 3600);
+        jwtService = new DefaultJwtService("test-secret-key-for-jwt-signing-must-be-at-least-512-bits-long-12345", 3600);
     }
 
     @Test
