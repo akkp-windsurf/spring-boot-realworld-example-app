@@ -1,15 +1,16 @@
 package io.spring.infrastructure.service;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import io.spring.core.service.JwtService;
 import io.spring.core.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Optional;
 
@@ -25,20 +26,29 @@ public class DefaultJwtService implements JwtService {
         this.sessionTime = sessionTime;
     }
 
+    private SecretKey getSigningKey() {
+        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
     @Override
     public String toToken(User user) {
         return Jwts.builder()
-            .setSubject(user.getId())
-            .setExpiration(expireTimeFromNow())
-            .signWith(SignatureAlgorithm.HS512, secret)
+            .subject(user.getId())
+            .expiration(expireTimeFromNow())
+            .signWith(getSigningKey())
             .compact();
     }
 
     @Override
     public Optional<String> getSubFromToken(String token) {
         try {
-            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
-            return Optional.ofNullable(claimsJws.getBody().getSubject());
+            Claims claims = Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+            return Optional.ofNullable(claims.getSubject());
         } catch (Exception e) {
             return Optional.empty();
         }
