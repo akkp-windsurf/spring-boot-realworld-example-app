@@ -4,7 +4,8 @@ plugins {
     id 'java'
     id 'idea'
     id 'eclipse'
-    id("com.epam.drill.agent.runner.app") version '0.2.2'
+    // Drill4J plugin temporarily disabled for Java 17 compatibility
+    // id("com.epam.drill.agent.runner.app") version '0.2.2'
 }
 
 version = '0.0.1-SNAPSHOT'
@@ -51,11 +52,12 @@ test {
     useJUnitPlatform()
 }
 
-drill {
-    agentId = "backend2"
-    groupId = "test"
-    buildVersion = "0.1.7"
-    adminHost = "localhost"
-    adminPort = 9090
-    logLevel = com.epam.drill.agent.runner.LogLevels.INFO
-}
+// Drill4J configuration temporarily disabled for Java 17 compatibility
+// drill {
+//     agentId = "backend2"
+//     groupId = "test"
+//     buildVersion = "0.1.7"
+//     adminHost = "localhost"
+//     adminPort = 9090
+//     logLevel = com.epam.drill.agent.runner.LogLevels.INFO
+// }
