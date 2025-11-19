@@ -5,8 +5,7 @@ import io.spring.core.service.JwtService;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
 import io.spring.infrastructure.mybatis.readservice.UserReadService;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -15,7 +14,6 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
 abstract class TestWithCurrentUser {
     @MockBean
     protected UserRepository userRepository;
@@ -49,7 +47,7 @@ abstract class TestWithCurrentUser {
         when(jwtService.getSubFromToken(eq(token))).thenReturn(Optional.of(user.getId()));
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         userFixture();
     }
