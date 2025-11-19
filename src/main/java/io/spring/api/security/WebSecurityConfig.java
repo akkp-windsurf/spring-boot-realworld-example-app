@@ -44,7 +44,7 @@ public class WebSecurityConfig {
             .exceptionHandling(ex -> ex.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/articles/feed").authenticated()
                 .requestMatchers(HttpMethod.POST, "/users", "/users/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/articles/**", "/profiles/**", "/tags").permitAll()
