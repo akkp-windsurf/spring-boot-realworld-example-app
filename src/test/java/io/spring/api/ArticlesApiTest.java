@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import org.joda.time.DateTime;
+import java.time.Instant;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,8 +62,8 @@ public class ArticlesApiTest extends TestWithCurrentUser {
             body,
             false,
             0,
-            new DateTime(),
-            new DateTime(),
+            Instant.now(),
+            Instant.now(),
             Arrays.asList(tagList),
             new ProfileData("userid", user.getUsername(), user.getBio(), user.getImage(), false));
 
@@ -128,8 +128,8 @@ public class ArticlesApiTest extends TestWithCurrentUser {
             body,
             false,
             0,
-            new DateTime(),
-            new DateTime(),
+            Instant.now(),
+            Instant.now(),
             Arrays.asList(tagList),
             new ProfileData("userid", user.getUsername(), user.getBio(), user.getImage(), false));
 
