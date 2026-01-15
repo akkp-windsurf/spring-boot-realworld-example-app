@@ -18,7 +18,9 @@ public class DefaultJwtServiceTest {
 
     @Before
     public void setUp() {
-        jwtService = new DefaultJwtService("123123", 3600);
+        // HS512 requires at least 64 bytes (512 bits) for the secret key
+        String secret = "nRvyYC4soFxBdZ-F-5Nnzz5USXstR1YylsTd-mA0aKtI9HUlriGrtkf-TiuDapkLiUCogO3JOK7kwZisrHp6wA";
+        jwtService = new DefaultJwtService(secret, 3600);
     }
 
     @Test
