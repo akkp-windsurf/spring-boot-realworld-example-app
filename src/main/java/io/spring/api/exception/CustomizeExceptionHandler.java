@@ -2,9 +2,8 @@ package io.spring.api.exception;
 
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
@@ -51,12 +50,7 @@ public class CustomizeExceptionHandler extends ResponseEntityExceptionHandler {
   public ResponseEntity<Object> handleInvalidAuthentication(
       InvalidAuthenticationException e, WebRequest request) {
     return ResponseEntity.status(UNPROCESSABLE_ENTITY)
-        .body(
-            new HashMap<String, Object>() {
-              {
-                put("message", e.getMessage());
-              }
-            });
+        .body(Collections.singletonMap("message", e.getMessage()));
   }
 
   @Override
@@ -84,16 +78,13 @@ public class CustomizeExceptionHandler extends ResponseEntityExceptionHandler {
   @ResponseBody
   public ErrorResource handleConstraintViolation(
       ConstraintViolationException ex, WebRequest request) {
-    List<FieldErrorResource> errors = new ArrayList<>();
-    for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
-      FieldErrorResource fieldErrorResource =
-          new FieldErrorResource(
-              violation.getRootBeanClass().getName(),
-              getParam(violation.getPropertyPath().toString()),
-              violation.getConstraintDescriptor().getAnnotation().annotationType().getSimpleName(),
-              violation.getMessage());
-      errors.add(fieldErrorResource);
-    }
+    List<FieldErrorResource> errors = ex.getConstraintViolations().stream()
+        .map(violation -> new FieldErrorResource(
+            violation.getRootBeanClass().getName(),
+            getParam(violation.getPropertyPath().toString()),
+            violation.getConstraintDescriptor().getAnnotation().annotationType().getSimpleName(),
+            violation.getMessage()))
+        .collect(Collectors.toList());
 
     return new ErrorResource(errors);
   }
