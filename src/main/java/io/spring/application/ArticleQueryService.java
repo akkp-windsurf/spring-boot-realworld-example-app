@@ -10,12 +10,12 @@ import io.spring.infrastructure.mybatis.readservice.UserRelationshipQueryService
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -61,8 +61,8 @@ public class ArticleQueryService {
     public ArticleDataList findRecentArticles(String tag, String author, String favoritedBy, Page page, User currentUser) {
         List<String> articleIds = articleReadService.queryArticles(tag, author, favoritedBy, page);
         int articleCount = articleReadService.countArticle(tag, author, favoritedBy);
-        if (articleIds.size() == 0) {
-            return new ArticleDataList(new ArrayList<>(), articleCount);
+        if (articleIds.isEmpty()) {
+            return new ArticleDataList(Collections.emptyList(), articleCount);
         } else {
             List<ArticleData> articles = articleReadService.findArticles(articleIds);
             fillExtraInfo(articles, currentUser);
@@ -91,10 +91,8 @@ public class ArticleQueryService {
 
     private void setFavoriteCount(List<ArticleData> articles) {
         List<ArticleFavoriteCount> favoritesCounts = articleFavoritesReadService.articlesFavoriteCount(articles.stream().map(ArticleData::getId).collect(toList()));
-        Map<String, Integer> countMap = new HashMap<>();
-        favoritesCounts.forEach(item -> {
-            countMap.put(item.getId(), item.getCount());
-        });
+        Map<String, Integer> countMap = favoritesCounts.stream()
+            .collect(Collectors.toMap(ArticleFavoriteCount::getId, ArticleFavoriteCount::getCount));
         articles.forEach(articleData -> articleData.setFavoritesCount(countMap.get(articleData.getId())));
     }
 
@@ -119,8 +117,8 @@ public class ArticleQueryService {
 
     public ArticleDataList findUserFeed(User user, Page page) {
         List<String> followdUsers = userRelationshipQueryService.followedUsers(user.getId());
-        if (followdUsers.size() == 0) {
-            return new ArticleDataList(new ArrayList<>(), 0);
+        if (followdUsers.isEmpty()) {
+            return new ArticleDataList(Collections.emptyList(), 0);
         } else {
             List<ArticleData> articles = articleReadService.findArticlesOfAuthors(followdUsers, page);
             fillExtraInfo(articles, user);

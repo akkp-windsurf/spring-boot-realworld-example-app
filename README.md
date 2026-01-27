@@ -10,11 +10,21 @@ For more information on how to this works with other frontends/backends, head ov
 
 # How it works
 
-The application uses Spring boot (Web, Mybatis).
+The application uses Spring boot (Web, Mybatis) with Java 8.
 
 * Use the idea of Domain Driven Design to separate the business term and infrastruture term.
 * Use MyBatis to implement the [Data Mapper](https://martinfowler.com/eaaCatalog/dataMapper.html) pattern for persistence.
 * Use [CQRS](https://martinfowler.com/bliki/CQRS.html) pattern to separate the read model and write model.
+
+## Java 8 Features
+
+This project leverages several Java 8 features:
+
+* **java.time API**: Uses `java.time.Instant` for date/time handling instead of Joda-Time, providing better performance and native JDK support.
+* **Lambda expressions**: Used throughout the codebase for cleaner, more concise code (e.g., in stream operations and functional interfaces).
+* **Method references**: Used for improved readability (e.g., `ArticleData::getId`, `FieldErrorResource::getField`).
+* **Stream API**: Used for collection processing, filtering, mapping, and collecting data (e.g., `Collectors.groupingBy`, `Collectors.toMap`).
+* **Optional**: Used for null-safe value handling in service methods.
 
 And the code organize as this:
 
