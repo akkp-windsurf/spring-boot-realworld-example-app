@@ -14,23 +14,20 @@ import io.spring.core.user.UserRepository;
 import io.spring.infrastructure.repository.MyBatisArticleFavoriteRepository;
 import io.spring.infrastructure.repository.MyBatisArticleRepository;
 import io.spring.infrastructure.repository.MyBatisUserRepository;
-import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.Instant;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(SpringRunner.class)
 @MybatisTest
 @Import({
     ArticleQueryService.class,
@@ -53,11 +50,11 @@ public class ArticleQueryServiceTest {
     private User user;
     private Article article;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         user = new User("aisensiy@gmail.com", "aisensiy", "123", "", "");
         userRepository.save(user);
-        article = new Article("test", "desc", "body", new String[]{"java", "spring"}, user.getId(), new DateTime());
+        article = new Article("test", "desc", "body", new String[]{"java", "spring"}, user.getId(), Instant.now());
         articleRepository.save(article);
     }
 
@@ -90,7 +87,7 @@ public class ArticleQueryServiceTest {
 
     @Test
     public void should_get_default_article_list() {
-        Article anotherArticle = new Article("new article", "desc", "body", new String[]{"test"}, user.getId(), new DateTime().minusHours(1));
+        Article anotherArticle = new Article("new article", "desc", "body", new String[]{"test"}, user.getId(), Instant.now().minusSeconds(3600));
         articleRepository.save(anotherArticle);
 
         ArticleDataList recentArticles = queryService.findRecentArticles(null, null, null, new Page(), user);

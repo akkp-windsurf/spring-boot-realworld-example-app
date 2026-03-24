@@ -5,12 +5,13 @@ import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
 @Configuration
 public class JacksonCustomizations {
@@ -22,22 +23,25 @@ public class JacksonCustomizations {
 
     public static class RealWorldModules extends SimpleModule {
         public RealWorldModules() {
-            addSerializer(DateTime.class, new DateTimeSerializer());
+            addSerializer(Instant.class, new InstantSerializer());
         }
     }
 
-    public static class DateTimeSerializer extends StdSerializer<DateTime> {
+    public static class InstantSerializer extends StdSerializer<Instant> {
 
-        protected DateTimeSerializer() {
-            super(DateTime.class);
+        private static final DateTimeFormatter FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZone(ZoneOffset.UTC);
+
+        protected InstantSerializer() {
+            super(Instant.class);
         }
 
         @Override
-        public void serialize(DateTime value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        public void serialize(Instant value, JsonGenerator gen, SerializerProvider provider) throws IOException {
             if (value == null) {
                 gen.writeNull();
             } else {
-                gen.writeString(ISODateTimeFormat.dateTime().withZoneUTC().print(value));
+                gen.writeString(FORMATTER.format(value));
             }
         }
     }

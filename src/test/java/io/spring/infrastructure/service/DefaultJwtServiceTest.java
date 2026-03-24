@@ -2,23 +2,25 @@ package io.spring.infrastructure.service;
 
 import io.spring.core.service.JwtService;
 import io.spring.core.user.User;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DefaultJwtServiceTest {
 
     private JwtService jwtService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        jwtService = new DefaultJwtService("123123", 3600);
+        // Use a test-only secret key that is at least 64 bytes for HS512
+        String testSecret = "test-secret-key-that-is-long-enough-for-hs512-algorithm-validation-in-jwt-unit-tests-1234567890";
+        jwtService = new DefaultJwtService(testSecret, 3600);
     }
 
     @Test
